@@ -1,4 +1,4 @@
-This repository contains a personal solution of the assigment "Project 3: Memory Management Chatbot" of the Udacity C++ Nanodegree Program.
+This repository contains a personal solution of the assignment "Project 3: Memory Management Chatbot" of the Udacity C++ Nanodegree Program.
 
 # CPPND: Memory Management Chatbot
 
