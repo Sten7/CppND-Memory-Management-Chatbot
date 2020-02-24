@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 #include "chatgui.h"
 
 // forward declarations
@@ -16,8 +17,13 @@ private:
     //// STUDENT CODE
     ////
 
+    // Task 3 : Exclusive Ownership 2
+    // adapt the vector _nodes in a way that the instances of GraphNodes
+    // to which the vector elements refer are exclusively owned by the class ChatLogic.
+    // Use an appropriate type of smart pointer to achieve this.
+
     // data handles (owned)
-    std::vector<GraphNode *> _nodes;
+    std::vector<std::unique_ptr<GraphNode>> _nodes;
     std::vector<GraphEdge *> _edges;
 
     ////
