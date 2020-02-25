@@ -41,11 +41,7 @@ ChatLogic::~ChatLogic()
         // delete *it; // Not necessary anymore, the objects will be released once the vector goes ou of scope, because they are wrapped in unique pointers
     }
 
-    // delete all edges
-    for (auto it = std::begin(_edges); it != std::end(_edges); ++it)
-    {
-        delete *it;
-    }
+    // Releasing edges is not necessary anymore. This is secured by the unique pointer.
 
     ////
     //// EOF STUDENT CODE
@@ -161,18 +157,18 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
                             auto childNode = std::find_if(_nodes.begin(), _nodes.end(), [&childToken](std::unique_ptr<GraphNode> const& node) { return node.get()->GetID() == std::stoi(childToken->second); });
 
                             // create new edge
-                            GraphEdge *edge = new GraphEdge(id);
+                            auto edge = std::make_unique<GraphEdge>(id);
                             // Since all nodes are owned by chatlogic anyway, only raw pointers are passed.
                             edge->SetChildNode(childNode.base()->get());
                             edge->SetParentNode(parentNode.base()->get());
-                            _edges.push_back(edge);
+                            //TODO: _edges.push_back(edge);
 
                             // find all keywords for current node
-                            AddAllTokensToElement("KEYWORD", tokens, *edge);
+                            AddAllTokensToElement("KEYWORD", tokens, *edge.get()); //Pass a reference to the edge, ownership does not change
 
                             // store reference in child node and parent node
-                            (*childNode)->AddEdgeToParentNode(edge);
-                            (*parentNode)->AddEdgeToChildNode(edge);
+                            (*childNode)->AddEdgeToParentNode(edge.get()); // Parent edges are not owning
+                            (*parentNode)->AddEdgeToChildNode(std::move(edge)); // Child edges are owned now, pass the ownership of the edge
                         }
 
                         ////
@@ -219,7 +215,16 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
 
     // add chatbot to graph root node
     _chatBot->SetRootNode(rootNode);
-    rootNode->MoveChatbotHere(_chatBot);
+    
+    // Task 5 : Moving the ChatBot
+    // In file chatlogic.cpp, create a local ChatBot instance on the stack at the bottom of function LoadAnswerGraphFromFile.
+    // Then, use move semantics to pass the ChatBot instance into the root node.
+    // Make sure that ChatLogic has no ownership relation to the ChatBot instance and thus is no longer responsible for memory allocation and deallocation. 
+
+    ChatBot bot = ChatBot("../images/chatbot.png"); // Create a local Chatbox instance on the stack
+    bot.SetChatLogicHandle(this);
+    rootNode->MoveChatbotHere(std::move(bot));
+    
     
     ////
     //// EOF STUDENT CODE
