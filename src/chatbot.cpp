@@ -72,7 +72,7 @@ ChatBot::ChatBot(const ChatBot &source) // 2 : copy constructor
 
         ChatBot::ChatBot(ChatBot &&source) // 4 : move constructor
     {
-        std::cout << "ChatBot Move (c’tor)" << std::endl;
+        std::cout << "ChatBot Move Constructor" << std::endl;
         _chatLogic = source._chatLogic;
         _rootNode = source._rootNode;
         _image = source._image;
@@ -85,7 +85,7 @@ ChatBot::ChatBot(const ChatBot &source) // 2 : copy constructor
     
         ChatBot &ChatBot::operator=(ChatBot &&source) // 5 : move assignment operator
     {
-        std::cout << "ChatBot Move (assign)"  << std::endl;
+        std::cout << "ChatBot Move Assignment Operator"  << std::endl;
         if (this == &source)
             return *this;
 
@@ -151,7 +151,7 @@ void ChatBot::SetCurrentNode(GraphNode *node)
     std::string answer = answers.at(dis(generator));
 
     // send selected node answer to user
-    //_chatLogic->SetChatbotHandle(this);
+    _chatLogic->SetChatbotHandle(this);
     _chatLogic->SendMessageToUser(answer);
 }
 
