@@ -219,7 +219,7 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
     // Then, use move semantics to pass the ChatBot instance into the root node.
     // Make sure that ChatLogic has no ownership relation to the ChatBot instance and thus is no longer responsible for memory allocation and deallocation. 
 
-    ChatBot bot("images/chatbot.png"); // Create a local Chatbox instance on the stack
+    ChatBot bot("../images/chatbot.png"); // Create a local Chatbox instance on the stack
     bot.SetChatLogicHandle(this);
     bot.SetRootNode(rootNode);
     rootNode->MoveChatbotHere(std::move(bot));
